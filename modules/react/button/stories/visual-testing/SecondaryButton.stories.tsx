@@ -1,5 +1,5 @@
 import React from 'react';
-import {PartialEmotionCanvasTheme} from '@workday/canvas-kit-react/common';
+import {CanvasProvider, PartialEmotionCanvasTheme} from '@workday/canvas-kit-react/common';
 import {
   ComponentStatesTable,
   permutateProps,
@@ -89,14 +89,21 @@ const SecondaryIconButtonTest = (props: {theme?: PartialEmotionCanvasTheme}) => 
       )}
       columnProps={stateTableColumnProps}
     >
-      {props => (
-        <Container blue={props.variant === 'inverse'}>
-          <SecondaryButton
-            {...props}
-            icon={props.shouldMirrorIconInRTL ? extLinkIcon : relatedActionsVerticalIcon}
-          ></SecondaryButton>
-        </Container>
-      )}
+      {props => {
+        const button = (
+          <Container blue={props.variant === 'inverse'}>
+            <SecondaryButton
+              {...props}
+              icon={props.shouldMirrorIconInRTL ? extLinkIcon : relatedActionsVerticalIcon}
+            ></SecondaryButton>
+          </Container>
+        );
+        return props.shouldMirrorIconInRTL ? (
+          <CanvasProvider dir="rtl">{button}</CanvasProvider>
+        ) : (
+          button
+        );
+      }}
     </ComponentStatesTable>
   </StaticStates>
 );
