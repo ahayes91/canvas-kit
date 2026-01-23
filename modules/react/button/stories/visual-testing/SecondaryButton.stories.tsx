@@ -6,7 +6,11 @@ import {
   StaticStates,
 } from '@workday/canvas-kit-react/testing';
 import {customColorTheme} from '../../../../../utils/storybook';
-import {playCircleIcon, relatedActionsVerticalIcon} from '@workday/canvas-system-icons-web';
+import {
+  extLinkIcon,
+  playCircleIcon,
+  relatedActionsVerticalIcon,
+} from '@workday/canvas-system-icons-web';
 import {SecondaryButton} from '@workday/canvas-kit-react/button';
 import {Container, stateTableColumnProps} from './utils';
 
@@ -63,24 +67,34 @@ const SecondaryButtonTest = (props: {theme?: PartialEmotionCanvasTheme}) => (
 const SecondaryIconButtonTest = (props: {theme?: PartialEmotionCanvasTheme}) => (
   <StaticStates theme={props.theme}>
     <ComponentStatesTable
-      rowProps={permutateProps({
-        variant: [
-          {value: undefined, label: ''},
-          {value: 'inverse', label: 'Inverse'},
-        ],
-        size: [
-          {value: 'extraSmall', label: 'Extra Small'},
-          {value: 'small', label: 'Small'},
-          {value: 'medium', label: 'Medium'},
-          {value: 'large', label: 'Large'},
-        ],
-        icon: [{value: relatedActionsVerticalIcon, label: ''}],
-      })}
+      rowProps={permutateProps(
+        {
+          variant: [
+            {value: undefined, label: ''},
+            {value: 'inverse', label: 'Inverse'},
+          ],
+          size: [
+            {value: 'extraSmall', label: 'Extra Small'},
+            {value: 'small', label: 'Small'},
+            {value: 'medium', label: 'Medium'},
+            {value: 'large', label: 'Large'},
+          ],
+          shouldMirrorIconInRTL: [
+            {value: false, label: ''},
+            {value: true, label: '& RTL Mirror'},
+          ],
+        },
+        // Only show RTL mirror examples for large size
+        props => props.size === 'large' || props.shouldMirrorIconInRTL === false
+      )}
       columnProps={stateTableColumnProps}
     >
       {props => (
         <Container blue={props.variant === 'inverse'}>
-          <SecondaryButton {...props}></SecondaryButton>
+          <SecondaryButton
+            {...props}
+            icon={props.shouldMirrorIconInRTL ? extLinkIcon : relatedActionsVerticalIcon}
+          ></SecondaryButton>
         </Container>
       )}
     </ComponentStatesTable>
